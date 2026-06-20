@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gunjan Agarwal — Brand Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #EDE9DF;
+      --cream-mid:#E4DFD3;
+      --burgundy: #4A1122;
+      --burgundy-light: #6B2035;
+      --warm-tan: #C4A882;
+      --blush:    #DFC3B0;
+      --charcoal: #1C1C1C;
+      --muted:    #7A6E65;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      cursor: none; /* custom cursor active */
+    }
+
+    /* ─────────────────────────────────────
+       CUSTOM CURSOR
+    ───────────────────────────────────── */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--burgundy);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s linear, width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), background 0.3s ease;
+      will-change: left, top;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--burgundy);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.18s var(--ease-out-expo), top 0.18s var(--ease-out-expo),
+                  width 0.4s var(--ease-out-expo), height 0.4s var(--ease-out-expo),
+                  opacity 0.3s ease, border-color 0.3s ease;
+      opacity: 0.5;
+      will-change: left, top;
+    }
+    body.cursor-hover #cursor-dot  { width: 14px; height: 14px; background: var(--burgundy-light); }
+    body.cursor-hover #cursor-ring { width: 56px; height: 56px; opacity: 0.25; border-color: var(--burgundy-light); }
+    body.cursor-link  #cursor-dot  { width: 48px; height: 48px; background: var(--burgundy); opacity: 0.12; }
+    body.cursor-link  #cursor-ring { opacity: 0; }
+
+    /* ─────────────────────────────────────
+       SCROLL PROGRESS BAR
+    ───────────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--burgundy);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ─────────────────────────────────────
+       PAGE LOADER
+    ───────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--burgundy);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.7s ease 0.2s, visibility 0.7s ease 0.2s;
+    }
+    #loader.done { opacity: 0; visibility: hidden; }
+    .loader-inner {
+      text-align: center;
+    }
+    .loader-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--cream);
+      overflow: hidden;
+    }
+    .loader-name span {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: loaderSlideUp 0.8s var(--ease-out-expo) forwards;
+    }
+    .loader-name span:nth-child(1) { animation-delay: 0.05s; }
+    .loader-name span:nth-child(2) { animation-delay: 0.10s; }
+    .loader-name span:nth-child(3) { animation-delay: 0.15s; }
+    .loader-name span:nth-child(4) { animation-delay: 0.20s; }
+    .loader-name span:nth-child(5) { animation-delay: 0.25s; }
+    .loader-name span:nth-child(6) { animation-delay: 0.30s; }
+    .loader-sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--warm-tan);
+      margin-top: 0.8rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.7s forwards;
+    }
+    @keyframes loaderSlideUp {
+      to { transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ─────────────────────────────────────
+       NAV
+    ───────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 3rem;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease,
+                  box-shadow 0.4s ease, padding 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(237, 233, 223, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 var(--blush);
+      padding: 0.9rem 3rem;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 1.1rem;
+      color: var(--burgundy);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: opacity 0.25s;
+    }
+    .nav-logo:hover { opacity: 0.7; }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      text-decoration: none;
+      opacity: 0.7;
+      position: relative;
+      padding-bottom: 3px;
+    }
+    /* Underline draw on hover */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--burgundy);
+      transition: width 0.35s var(--ease-out-expo);
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ─────────────────────────────────────
+       HERO
+    ───────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-type {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none; z-index: 0;
+    }
+    .hero-bg-type span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(18rem, 32vw, 38rem);
+      color: var(--burgundy);
+      opacity: 0.06;
+      line-height: 1;
+      user-select: none;
+      letter-spacing: -0.06em;
+      /* Subtle float animation */
+      animation: heroFloat 8s ease-in-out infinite;
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50%       { transform: translateY(-18px) rotate(0deg); }
+    }
+
+    /* Hero content: clip-path entrance animations */
+    .hero-left {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 3rem 5rem 4rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: heroFadeUp 0.7s var(--ease-out-expo) 1.2s forwards;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(3.5rem, 6vw, 6.5rem);
+      line-height: 0.95;
+      color: var(--burgundy);
+      margin-bottom: 0.4rem;
+      overflow: hidden;
+    }
+    .hero-name-line {
+      display: block;
+      transform: translateY(110%);
+      animation: heroSlideUp 0.9s var(--ease-out-expo) 1.4s forwards;
+    }
+    .hero-name-script {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      color: var(--burgundy-light);
+      line-height: 1;
+      display: block;
+      transform: translateY(110%);
+      animation: heroSlideUp 0.9s var(--ease-out-expo) 1.55s forwards;
+    }
+    .hero-tagline {
+      margin-top: 2.4rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 28ch;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: heroFadeUp 0.7s var(--ease-out-expo) 1.7s forwards;
+    }
+    .hero-pills {
+      display: flex; gap: 0.6rem;
+      margin-top: 2rem; flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: heroFadeUp 0.7s var(--ease-out-expo) 1.85s forwards;
+    }
+    .pill {
+      border: 1px solid var(--burgundy);
+      color: var(--burgundy);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      transition: background 0.25s, color 0.25s;
+    }
+    .pill:hover { background: var(--burgundy); color: var(--cream); }
+    .hero-cta {
+      margin-top: 3rem;
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: var(--burgundy);
+      color: var(--cream);
+      padding: 0.9rem 2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      width: fit-content;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: heroFadeUp 0.7s var(--ease-out-expo) 2s forwards;
+      /* hover handled separately */
+      transition: background 0.3s ease, transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+    }
+    .hero-cta:hover {
+      background: var(--burgundy-light);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(74,17,34,0.25);
+    }
+    .hero-cta-arrow {
+      font-size: 1rem;
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+    .hero-cta:hover .hero-cta-arrow { transform: translateY(3px); }
+
+    @keyframes heroSlideUp {
+      to { transform: translateY(0); }
+    }
+    @keyframes heroFadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 4rem 5rem 2rem;
+      opacity: 0;
+      animation: heroFadeUp 1s var(--ease-out-expo) 2.1s forwards;
+    }
+    .hero-quote-block { margin-top: auto; }
+    .hero-quote-flipped {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      color: var(--burgundy);
+      opacity: 0.4;
+      transform: scaleY(-1) scaleX(-1);
+      display: inline-block;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+    .hero-quote-normal {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      color: var(--burgundy);
+      line-height: 1.4;
+      display: block;
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); z-index: 2;
+      opacity: 0;
+      animation: heroFadeUp 0.7s ease 2.4s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--warm-tan));
+      animation: scrollDrop 2s ease-in-out infinite;
+    }
+    @keyframes scrollDrop {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      40%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      60%  { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─────────────────────────────────────
+       SECTION BASE
+    ───────────────────────────────────── */
+    section { padding: 7rem 4rem; }
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-tan);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 0 0 0px; height: 1px;
+      background: var(--warm-tan);
+      transition: flex-basis 0.8s var(--ease-out-expo) 0.2s;
+    }
+    .section-label.visible::after { flex-basis: 40px; }
+
+    /* ─────────────────────────────────────
+       REVEAL SYSTEM  (upgraded)
+    ───────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* clip-path variant for headings */
+    .reveal-clip {
+      clip-path: inset(0 0 100% 0);
+      transition: clip-path 0.85s var(--ease-out-expo);
+    }
+    .reveal-clip.visible { clip-path: inset(0 0 0% 0); }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.45s; }
+
+    /* ─────────────────────────────────────
+       ABOUT
+    ───────────────────────────────────── */
+    #about {
+      background: var(--cream-mid);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--burgundy);
+      margin-bottom: 2rem;
+    }
+    .about-body {
+      font-size: 0.9rem;
+      line-height: 1.85;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+    .about-right {
+      border-left: 1px solid var(--blush);
+      padding-left: 4rem;
+    }
+    .about-values { display: flex; flex-direction: column; gap: 2rem; }
+    .value-item {
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+    .value-item:hover { transform: translateX(6px); }
+    .value-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      color: var(--warm-tan);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+    }
+    .value-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--burgundy); margin-bottom: 0.4rem;
+    }
+    .value-desc {
+      font-size: 0.8rem; line-height: 1.7; color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────
+       WORK
+    ───────────────────────────────────── */
+    #work { padding: 7rem 4rem; }
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .work-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 900;
+      color: var(--burgundy);
+      line-height: 1;
+    }
+    .work-title em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      display: block; font-size: 1.1em;
+    }
+    .work-subtitle {
+      font-size: 0.8rem; color: var(--muted);
+      max-width: 24ch; text-align: right; line-height: 1.6;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      background: var(--cream-mid);
+      /* Entry animation handled by reveal + stagger */
+    }
+    .project-card:nth-child(1) { grid-column: span 7; }
+    .project-card:nth-child(2) { grid-column: span 5; }
+    .project-card:nth-child(3) { grid-column: span 5; }
+    .project-card:nth-child(4) { grid-column: span 7; }
+    .project-card:nth-child(5) { grid-column: span 12; }
+
+    .project-bg {
+      width: 100%; aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .project-card:nth-child(5) .project-bg { aspect-ratio: 21/7; }
+
+    /* Image scale on hover */
+    .project-bg-inner {
+      position: absolute; inset: 0;
+      transition: transform 0.7s var(--ease-out-expo);
+    }
+    .project-card:hover .project-bg-inner { transform: scale(1.06); }
+
+    .bg-red    { background: linear-gradient(135deg, #8B1A2A 0%, #C4453A 100%); }
+    .bg-cream  { background: linear-gradient(135deg, #E8DCC8 0%, #C9B89A 100%); }
+    .bg-dark   { background: linear-gradient(135deg, #1C1C1C 0%, #3A2A30 100%); }
+    .bg-soft   { background: linear-gradient(135deg, #C8D4C0 0%, #9BB8A8 100%); }
+    .bg-gradient{ background: linear-gradient(135deg, #C090C0 0%, #90B0D0 50%, #C0E0B8 100%); }
+
+    .project-label-inner {
+      position: relative; z-index: 1;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 5rem);
+      font-weight: 900;
+      opacity: 0.18;
+      color: white;
+      letter-spacing: -0.03em;
+      text-align: center;
+      padding: 1rem;
+      transition: opacity 0.35s ease, transform 0.5s var(--ease-out-expo);
+    }
+    .project-card:hover .project-label-inner {
+      opacity: 0;
+      transform: scale(1.15);
+    }
+
+    /* Overlay: slides up from bottom */
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: var(--burgundy);
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+      transform: translateY(100%);
+      transition: transform 0.55s var(--ease-out-expo);
+    }
+    .project-card:hover .project-overlay { transform: translateY(0); }
+    .overlay-tag {
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-tan); margin-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease 0.15s, transform 0.4s var(--ease-out-expo) 0.15s;
+    }
+    .overlay-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--cream); line-height: 1.2;
+      margin-bottom: 0.6rem;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease 0.2s, transform 0.4s var(--ease-out-expo) 0.2s;
+    }
+    .overlay-desc {
+      font-size: 0.8rem; line-height: 1.6;
+      color: rgba(237,233,223,0.75);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease 0.25s, transform 0.4s var(--ease-out-expo) 0.25s;
+    }
+    .project-card:hover .overlay-tag,
+    .project-card:hover .overlay-title,
+    .project-card:hover .overlay-desc {
+      opacity: 1; transform: translateY(0);
+    }
+
+    .project-meta {
+      padding: 1.2rem 1.4rem;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.3s ease;
+    }
+    .project-card:hover .project-meta { background: rgba(74,17,34,0.05); }
+    .project-meta-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--burgundy);
+    }
+    .project-meta-cat {
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────
+       PROCESS
+    ───────────────────────────────────── */
+    #process {
+      background: var(--burgundy);
+      color: var(--cream);
+      position: relative; overflow: hidden;
+    }
+    #process .section-label { color: var(--warm-tan); }
+    #process .section-label::after { background: var(--warm-tan); }
+
+    .process-bg-text {
+      position: absolute;
+      right: -2rem; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 22vw;
+      color: white; opacity: 0.04;
+      line-height: 1;
+      user-select: none; pointer-events: none;
+      /* slow drift */
+      animation: processDrift 12s ease-in-out infinite;
+    }
+    @keyframes processDrift {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      50%       { transform: translateY(-50%) translateX(-20px); }
+    }
+
+    .process-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.5rem);
+      font-weight: 700; color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .process-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--blush); line-height: 1.6;
+      max-width: 52ch; margin-bottom: 4rem;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(237,233,223,0.15);
+    }
+    .step {
+      padding: 2.5rem 1.5rem 2rem;
+      border-right: 1px solid rgba(237,233,223,0.15);
+      position: relative;
+      transition: background 0.3s ease;
+    }
+    .step:last-child { border-right: none; }
+    .step:hover { background: rgba(237,233,223,0.04); }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 300;
+      color: var(--warm-tan); opacity: 0.5;
+      line-height: 1; margin-bottom: 1rem;
+      transition: opacity 0.3s ease;
+    }
+    .step:hover .step-num { opacity: 0.9; }
+    .step-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 1rem;
+      color: var(--cream); margin-bottom: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .step-desc {
+      font-size: 0.78rem; line-height: 1.7;
+      color: rgba(237,233,223,0.6);
+    }
+    /* Animated connector line between steps */
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--warm-tan);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+    .step.visible::before { transform: scaleX(1); }
+    .step:nth-child(2).visible::before { transition-delay: 0.1s; }
+    .step:nth-child(3).visible::before { transition-delay: 0.2s; }
+    .step:nth-child(4).visible::before { transition-delay: 0.3s; }
+    .step:nth-child(5).visible::before { transition-delay: 0.4s; }
+
+    /* ─────────────────────────────────────
+       SKILLS
+    ───────────────────────────────────── */
+    #skills { background: var(--cream); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      margin-top: 3rem;
+    }
+    .skills-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      font-weight: 900; color: var(--burgundy);
+      margin-bottom: 3rem; line-height: 1.1;
+    }
+    .skill-category { margin-bottom: 2.5rem; }
+    .skill-cat-name {
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--warm-tan);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .skill-cat-name::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--blush);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag {
+      font-size: 0.78rem; color: var(--charcoal);
+      background: var(--cream-mid);
+      border: 1px solid var(--blush);
+      padding: 0.3rem 0.8rem;
+      transition: background 0.25s ease, color 0.25s ease,
+                  border-color 0.25s ease, transform 0.2s var(--ease-out-expo);
+    }
+    .skill-tag:hover {
+      background: var(--burgundy);
+      color: var(--cream);
+      border-color: var(--burgundy);
+      transform: translateY(-2px);
+    }
+    .soft-skill {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--blush);
+      transition: padding-left 0.3s var(--ease-out-expo);
+    }
+    .soft-skill:last-child { border-bottom: none; }
+    .soft-skill:hover { padding-left: 8px; }
+    .soft-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--burgundy); flex-shrink: 0;
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+    .soft-skill:hover .soft-dot { transform: scale(1.5); }
+    .soft-name {
+      font-size: 0.9rem; color: var(--charcoal); font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────
+       CONTACT
+    ───────────────────────────────────── */
+    #contact {
+      background: var(--cream-mid);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      min-height: 70vh;
+    }
+    .contact-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4.5vw, 5rem);
+      font-weight: 900; color: var(--burgundy);
+      line-height: 1;
+    }
+    .contact-heading em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      display: block;
+    }
+    .contact-body {
+      font-size: 0.9rem; line-height: 1.8;
+      color: var(--muted); margin-top: 1.5rem;
+      max-width: 36ch;
+    }
+    .contact-right {
+      display: flex; flex-direction: column; gap: 1.2rem;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 1.2rem;
+      text-decoration: none;
+      padding: 1.4rem 1.8rem;
+      border: 1px solid var(--blush);
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      /* staggered reveal handled by JS */
+    }
+    /* Burgundy fill sweeps left→right on hover */
+    .contact-link::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--burgundy);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s var(--ease-out-expo);
+      z-index: 0;
+    }
+    .contact-link:hover::before { transform: scaleX(1); }
+    .contact-link > * { position: relative; z-index: 1; }
+    .contact-link:hover .cl-label,
+    .contact-link:hover .cl-value,
+    .contact-link:hover .cl-icon { color: var(--cream); }
+    .cl-icon {
+      font-size: 1.2rem; width: 2rem; text-align: center;
+      color: var(--burgundy);
+      transition: color 0.3s ease;
+    }
+    .cl-label {
+      font-size: 0.6rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 0.2rem;
+      transition: color 0.3s ease;
+    }
+    .cl-value {
+      font-size: 0.9rem; color: var(--charcoal);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .cl-arrow {
+      margin-left: auto;
+      color: var(--warm-tan);
+      font-size: 1.1rem;
+      transition: transform 0.35s var(--ease-out-expo), color 0.3s ease;
+    }
+    .contact-link:hover .cl-arrow {
+      transform: translateX(6px);
+      color: var(--blush);
+    }
+
+    /* ─────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────── */
+    footer {
+      background: var(--burgundy);
+      padding: 2.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 1rem;
+      color: var(--cream); letter-spacing: 0.04em;
+    }
+    .footer-note {
+      font-size: 0.72rem; color: rgba(237,233,223,0.5);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav.scrolled { padding: 0.8rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      section { padding: 5rem 1.5rem; }
+
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 5rem; }
+      .hero-right { padding: 2rem 1.5rem 4rem; }
+      .hero-left { padding: 6rem 1.5rem 2rem; }
+      .hero-quote-flipped, .hero-quote-normal { display: none; }
+
+      #about { grid-template-columns: 1fr; gap: 2rem; }
+      .about-right { border-left: none; padding-left: 0;
+        border-top: 1px solid var(--blush); padding-top: 2rem; }
+
+      .work-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .work-subtitle { text-align: left; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card:nth-child(n) { grid-column: span 1; }
+
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .step { border-right: none; border-bottom: 1px solid rgba(237,233,223,0.15); }
+
+      .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+      #contact { grid-template-columns: 1fr; gap: 2rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+
+      /* Disable custom cursor on touch */
+      body { cursor: auto; }
+      #cursor-dot, #cursor-ring { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal, .reveal-clip { opacity: 1; transform: none; clip-path: none; }
+      #loader { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <!-- PAGE LOADER -->
+  <div id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="loader-name">
+        <span>G</span><span>u</span><span>n</span><span>j</span><span>a</span><span>n</span>
+      </div>
+      <p class="loader-sub">Brand Designer &amp; Strategist</p>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo">GA</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg-type" aria-hidden="true">
+      <span>G</span>
+    </div>
+    <div class="hero-left">
+      <p class="hero-eyebrow">Portfolio 2025 &nbsp;·&nbsp; Hyderabad, India</p>
+      <h1 class="hero-name">
+        <span class="hero-name-line">Gunjan</span>
+        <em class="hero-name-script">Agarwal</em>
+      </h1>
+      <p class="hero-tagline">A graphic designer with a love for thoughtful details and visual storytelling — where creativity and strategy come together.</p>
+      <div class="hero-pills">
+        <span class="pill">Creative</span>
+        <span class="pill">Expressive</span>
+        <span class="pill">Intentional</span>
+      </div>
+      <a href="#work" class="hero-cta">
+        View Work <span class="hero-cta-arrow">↓</span>
+      </a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-quote-block">
+        <span class="hero-quote-flipped">The more you learn,<br>the less you know.</span>
+        <span class="hero-quote-normal">The more you learn,<br>the less you know.</span>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-left">
+      <p class="section-label reveal">About</p>
+      <h2 class="about-heading reveal reveal-delay-1">
+        Design as art<br>&amp; problem-solving.
+      </h2>
+      <p class="about-body reveal reveal-delay-2">
+        For me, design has always been a safe space where creativity and strategy come together. I love storytelling through visuals and paying attention to the little details, and I've worked across print, digital, and branding projects that keep me versatile and adaptable.
+      </p>
+      <p class="about-body reveal reveal-delay-2">
+        Over time, I've learned that good design isn't just about looking artistic, but about being clear, intentional, and expressive. Collaborating with different teams has helped me grow — not just as a designer, but as someone who can listen, communicate, and bring ideas to life in a way that actually works.
+      </p>
+    </div>
+    <div class="about-right">
+      <div class="about-values">
+        <div class="value-item reveal">
+          <p class="value-num">— What I do</p>
+          <h3 class="value-title">Brand Identity</h3>
+          <p class="value-desc">Building visual languages from the ground up — logos, systems, guidelines — that carry meaning across every touchpoint.</p>
+        </div>
+        <div class="value-item reveal reveal-delay-1">
+          <p class="value-num">— What I do</p>
+          <h3 class="value-title">Visual Storytelling</h3>
+          <p class="value-desc">Editorial, packaging, and print that go beyond function — each piece a small story in itself.</p>
+        </div>
+        <div class="value-item reveal reveal-delay-2">
+          <p class="value-num">— What I do</p>
+          <h3 class="value-title">Brand Creatives</h3>
+          <p class="value-desc">Social assets, art direction, and campaigns rooted in intention — where every layout has a reason.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="work-header">
+      <h2 class="work-title reveal">
+        Selected
+        <em>Works</em>
+      </h2>
+      <p class="work-subtitle reveal reveal-delay-1">A curated selection of projects from 2023–2025.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-bg bg-red">
+          <div class="project-bg-inner bg-red" style="position:absolute;inset:0;"></div>
+          <div class="project-label-inner" style="position:relative;z-index:1;">Red Roots</div>
+          <div class="project-overlay">
+            <p class="overlay-tag">Brand Identity</p>
+            <p class="overlay-title">Red Roots Farm</p>
+            <p class="overlay-desc">A visual story celebrating the joy of strawberry picking — warm, nostalgic, rooted in simple pleasures.</p>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="project-meta-name">Red Roots Farm</span>
+          <span class="project-meta-cat">Brand Identity</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-bg bg-soft">
+          <div class="project-bg-inner bg-soft" style="position:absolute;inset:0;"></div>
+          <div class="project-label-inner" style="position:relative;z-index:1;">Luméa</div>
+          <div class="project-overlay">
+            <p class="overlay-tag">Print &amp; Packaging</p>
+            <p class="overlay-title">Luméa Organics</p>
+            <p class="overlay-desc">Calm, minimal packaging that turns skincare into a ritual — soft gradients, frosted glass, and quiet luxury.</p>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="project-meta-name">Luméa Organics</span>
+          <span class="project-meta-cat">Packaging Design</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-bg bg-cream">
+          <div class="project-bg-inner bg-cream" style="position:absolute;inset:0;"></div>
+          <div class="project-label-inner" style="position:relative;z-index:1;">अरण्य</div>
+          <div class="project-overlay">
+            <p class="overlay-tag">Editorial</p>
+            <p class="overlay-title">Aranya Tea Co.</p>
+            <p class="overlay-desc">Heritage-inspired identity celebrating India's tea culture — earthy palettes, a kettle emblem, and the Monsoon Tales postcard series.</p>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="project-meta-name">Aranya Tea Co.</span>
+          <span class="project-meta-cat">Editorial &amp; Identity</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-bg bg-dark">
+          <div class="project-bg-inner bg-dark" style="position:absolute;inset:0;"></div>
+          <div class="project-label-inner" style="position:relative;z-index:1;">Fractured</div>
+          <div class="project-overlay">
+            <p class="overlay-tag">Art &amp; Illustrations</p>
+            <p class="overlay-title">Fractured &amp; Oblivion</p>
+            <p class="overlay-desc">A paired poster series built around themes of distortion and disappearance — brutalist graphic language, editorial storytelling.</p>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="project-meta-name">Fractured &amp; Oblivion</span>
+          <span class="project-meta-cat">Art &amp; Illustration</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-bg bg-gradient">
+          <div class="project-bg-inner bg-gradient" style="position:absolute;inset:0;"></div>
+          <div class="project-label-inner" style="position:relative;z-index:1;">Movement &amp; Mindfulness</div>
+          <div class="project-overlay">
+            <p class="overlay-tag">Brand Creatives &amp; Visuals</p>
+            <p class="overlay-title">Movement &amp; Mindfulness</p>
+            <p class="overlay-desc">Exploring dual aesthetics for a wellness brand — one immersive and nature-driven, one minimal, structured, and bold. Two visual languages, one soul.</p>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="project-meta-name">Movement &amp; Mindfulness</span>
+          <span class="project-meta-cat">Brand Creatives</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="process-bg-text" aria-hidden="true">process</div>
+    <p class="section-label reveal">My Creative Process</p>
+    <h2 class="process-heading reveal reveal-delay-1">Ideas grow naturally.<br>Design lands intentionally.</h2>
+    <p class="process-intro reveal reveal-delay-2">In my creative process, I like to let ideas grow naturally without overcomplicating things. It's about balancing detail and intention until the design feels clear, honest, and true to its purpose.</p>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-name">Listen</div>
+        <p class="step-desc">Understanding the brief deeply — the audience, the feeling, the problem to solve.</p>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-name">Research</div>
+        <p class="step-desc">Immersing in the world of the brief — references, culture, competitors, context.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-name">Explore</div>
+        <p class="step-desc">Sketching, moodboarding, playing — letting the direction reveal itself.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-name">Refine</div>
+        <p class="step-desc">Narrowing in — editing without fear, sharpening without losing soul.</p>
+      </div>
+      <div class="step reveal reveal-delay-4">
+        <div class="step-num">05</div>
+        <div class="step-name">Design</div>
+        <p class="step-desc">Executing with precision — every detail considered, every choice earned.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label reveal">Toolbox</p>
+    <h2 class="skills-heading reveal reveal-delay-1">
+      The tools<br>behind the work.
+    </h2>
+    <div class="skills-grid">
+      <div class="skills-col">
+        <div class="skill-category reveal">
+          <p class="skill-cat-name">Design Suite</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Adobe Photoshop</span>
+            <span class="skill-tag">Adobe Illustrator</span>
+            <span class="skill-tag">Adobe InDesign</span>
+            <span class="skill-tag">Adobe Lightroom</span>
+            <span class="skill-tag">Adobe Firefly</span>
+            <span class="skill-tag">Adobe Premier Pro</span>
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Framer</span>
+            <span class="skill-tag">Canva</span>
+            <span class="skill-tag">Blender</span>
+            <span class="skill-tag">Procreate</span>
+            <span class="skill-tag">Sketchbook</span>
+            <span class="skill-tag">AutoCAD</span>
+            <span class="skill-tag">SketchUp</span>
+          </div>
+        </div>
+        <div class="skill-category reveal reveal-delay-1">
+          <p class="skill-cat-name">I Do</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Graphic Design</span>
+            <span class="skill-tag">Visual Identity</span>
+            <span class="skill-tag">Editorial</span>
+            <span class="skill-tag">Branding</span>
+            <span class="skill-tag">Packaging &amp; Print</span>
+            <span class="skill-tag">Illustration</span>
+            <span class="skill-tag">Art Direction</span>
+          </div>
+        </div>
+      </div>
+      <div class="skills-col">
+        <div class="skill-category reveal">
+          <p class="skill-cat-name">Soft Skills</p>
+          <div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Adaptability &amp; Curiosity</span></div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Presentation</span></div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Leadership &amp; Organisation</span></div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Critical Thinking</span></div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Teamwork</span></div>
+            <div class="soft-skill"><div class="soft-dot"></div><span class="soft-name">Exploration</span></div>
+          </div>
+        </div>
+        <div class="skill-category reveal reveal-delay-1">
+          <p class="skill-cat-name">Education</p>
+          <div class="skill-tags">
+            <span class="skill-tag">B.Arch — DY Patil University, 2020–2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-left">
+      <p class="section-label reveal">Get in Touch</p>
+      <h2 class="contact-heading reveal reveal-delay-1">
+        End of portfolio.
+        <em>Beginning of a<br>conversation?</em>
+      </h2>
+      <p class="contact-body reveal reveal-delay-2">I'm currently open to freelance projects, collaborations, and full-time opportunities. Let's make something that feels real and lasts.</p>
+    </div>
+    <div class="contact-right" id="contact-links">
+      <a href="mailto:gunjannn.agarwal@gmail.com" class="contact-link">
+        <span class="cl-icon">✉</span>
+        <div class="cl-text">
+          <p class="cl-label">Email</p>
+          <p class="cl-value">gunjannn.agarwal@gmail.com</p>
+        </div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://www.behance.net/gunjanagarwal22" target="_blank" rel="noopener" class="contact-link">
+        <span class="cl-icon">Bē</span>
+        <div class="cl-text">
+          <p class="cl-label">Behance</p>
+          <p class="cl-value">gunjanagarwal22</p>
+        </div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/gunjan-agarwal" target="_blank" rel="noopener" class="contact-link">
+        <span class="cl-icon">in</span>
+        <div class="cl-text">
+          <p class="cl-label">LinkedIn</p>
+          <p class="cl-value">Gunjan Agarwal</p>
+        </div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="tel:+918500654034" class="contact-link">
+        <span class="cl-icon">☎</span>
+        <div class="cl-text">
+          <p class="cl-label">Phone</p>
+          <p class="cl-value">+91 8500654034</p>
+        </div>
+        <span class="cl-arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-name">Gunjan Agarwal</span>
+    <span class="footer-note">Portfolio 2025 © All Rights Reserved</span>
+  </footer>
+
+  <script>
+    /* ── LOADER ── */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('done');
+      }, 1800);
+    });
+
+    /* ── CUSTOM CURSOR ── */
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = -100, my = -100;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+      ring.style.left = mx + 'px';
+      ring.style.top  = my + 'px';
+    });
+
+    document.querySelectorAll('.project-card, .value-item, .skill-tag, .soft-skill').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+    document.querySelectorAll('a, button, .pill').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-link'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-link'));
+    });
+
+    /* ── SCROLL PROGRESS BAR ── */
+    const bar = document.getElementById('progress-bar');
+    function updateProgress() {
+      const scrollTop  = window.scrollY;
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width  = pct + '%';
+    }
+
+    /* ── NAV SCROLL EFFECT ── */
+    const nav = document.getElementById('main-nav');
+    function onScroll() {
+      updateProgress();
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── INTERSECTION OBSERVER — scroll reveals ── */
+    const revealEls = document.querySelectorAll('.reveal, .reveal-clip, .section-label, .step');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    /* ── CONTACT LINKS staggered reveal ── */
+    const contactLinks = document.querySelectorAll('.contact-link');
+    contactLinks.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(24px)';
+      el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 0.1}s, background 0.45s cubic-bezier(0.76,0,0.24,1)`;
+    });
+    const contactSection = document.getElementById('contact-links');
+    const contactIO = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        contactLinks.forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateX(0)';
+        });
+        contactIO.disconnect();
+      }
+    }, { threshold: 0.2 });
+    contactIO.observe(contactSection);
+  </script>
+</body>
+</html>
